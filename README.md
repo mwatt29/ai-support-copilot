@@ -1,9 +1,9 @@
-AI Support Copilot (MVP)
-An end-to-end vertical slice of an AI-powered support copilot that ingests a knowledge base, receives tickets, and suggests answers with sources using a local AI model.
+## AI Support Copilot (MVP)
+An end-to-end vertical slice of an AI-powered support copilot that ingests a knowledge base, receives tickets, and suggests an answer with sources using a local AI model.
 
 Status: MVP. This version uses Docker for the backend and a Streamlit app for the user interface.
 
-Stack
+# Stack
 Backend: FastAPI (Python)
 
 DB: PostgreSQL + pgvector
@@ -26,44 +26,56 @@ Generation: The original ticket text and the retrieved chunks are passed to a lo
 Quick Start
 This guide will get the backend API and the Streamlit web UI running on your local machine.
 
-0) Prerequisites
+# 0) Prerequisites
 Docker + Docker Compose
 
 Ollama: Download and install from ollama.com.
 
 Python 3.11+ installed on your local machine (for the Streamlit app).
 
-1) Pull the AI Models
+# 1) Pull the AI Models
 After installing Ollama, open your terminal and pull the required models. This will download them to your machine.
-
 
 ollama pull llama3
 ollama pull mxbai-embed-large
-2) Start the Backend Services
-With Docker running, start the API and database containers. This command will build the Docker image and start the services in the background.
 
+# 2) Start the Backend Services
+With Docker running, start the API and database containers. This command will build the Docker image and start the services in the background.
 
 docker compose up --build -d
 Your API is now running. You can view the documentation at http://localhost:8000/docs.
 
-3) Set Up the Database
+# 3) Set Up the Database
 In a new terminal, run the following commands to prepare your database.
 
-First, create the database tables:
+
+First, create the database tables
 docker compose exec api python -m apps.api.scripts.create_tables
 
-Second, ingest the sample knowledge base files:
+Second, ingest the sample knowledge base files
 docker compose exec api python -m apps.api.scripts.ingest_kb --org "Acme Inc" --path /app/data/kb
 Your backend is now fully initialized and ready to serve requests.
 
-4) Launch the Web App
+# 4) Launch the Web App
 The Streamlit app is the user interface for your copilot.
 
-
-First, install the required Python libraries on your machine:
+First, install the required Python libraries on your machine
 pip3 install streamlit requests
 
-Second, launch the web app:
+Second, launch the web app
 python3 -m streamlit run webapp.py
-A new tab should automatically open in your web browser at http://localhost:8501. You can now use the interface to create tickets and get AI suggestions.
+A new tab should automatically open in your web browser at http://localhost:8501.
+
+Customizing the Web App
+The web app is styled with custom CSS to create an abstract, animated gradient background.
+
+How it works: The styling is not in a separate .css file. Instead, it is defined as a Python string inside the webapp.py script and injected directly into the app.
+
+To make changes:
+
+Open webapp.py.
+
+Find the page_bg_css variable.
+
+Modify the CSS inside this string to change the app's appearance.
 
