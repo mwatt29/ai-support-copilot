@@ -1,15 +1,41 @@
+
 import streamlit as st
 import requests
 
 # --- Configuration ---
 API_BASE_URL = "http://localhost:8000" # Your FastAPI backend URL
 
-# --- Page Layout ---
+# --- Page Layout & Styling ---
 st.set_page_config(page_title="AI Support Copilot", layout="wide")
+
+
+page_bg_css = """
+<style>
+[data-testid="stAppViewContainer"] {
+    background: linear-gradient(-45deg, #1e0c42, #4d1a53, #2a3a9b, #0e818b);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+[data-testid="stHeader"] {
+    background-color: transparent;
+}
+</style>
+"""
+# Inject the CSS into the app
+st.markdown(page_bg_css, unsafe_allow_html=True)
+
+
+# --- Main App Content ---
 st.title("🤖 AI Support Copilot")
 
 st.write("Create a temporary ticket to get an AI-powered suggestion.")
-st.info("This interface calls the same FastAPI backend as the Zendesk app would.")
 
 # --- Input Form ---
 with st.form("ticket_form"):
@@ -22,9 +48,9 @@ with st.form("ticket_form"):
 if submitted:
     with st.spinner("Thinking..."):
         try:
-            # 1. Create the ticket
+            # 1. Create the ticket using the correct endpoint
             create_response = requests.post(
-                f"{API_BASE_URL}/create_simple_ticket", # Assumes a new endpoint
+                f"{API_BASE_URL}/create_simple_ticket",
                 json={"subject": subject, "body": body, "org": "Acme Inc"}
             )
             create_response.raise_for_status()
