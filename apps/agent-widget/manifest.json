@@ -1,0 +1,14 @@
+{
+  "name": "AI Support Copilot (MVP)",
+  "author": "You",
+  "defaultLocale": "en",
+  "location": {
+    "support": {
+      "ticket_sidebar": {
+        "url": "assets/index.html"
+      }
+    }
+  },
+  "version": "0.0.1",
+  "frameworkVersion": "2.0"
+}

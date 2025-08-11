@@ -1,0 +1,32 @@
+services:
+  db:
+    image: ankane/pgvector:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: copilot
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-init/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@db:5432/copilot
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      ZENDESK_SHARED_SECRET: dev-shared-secret
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
